@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  adminer:
+    image: adminer
+    container_name: adminer-docker
+    depends_on:
+      - postgresql-docker
+    ports:
+      - '8080:8080'
+    networks:
+      - express-postgres-network
+    restart: on-failure
+
+  telegram-bot-template:
+    environment:
+      - NODE_ENV=development
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./:/usr/src/app
+    container_name: telegram-bot-template
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
+    command: npm run start
+    depends_on:
+      - postgresql-docker
+    networks:
+      - express-postgres-network
+    restart: on-failure
+    
+  postgresql-docker:
+    image: postgres
+    container_name: postgresql-docker
+    environment:
+      POSTGRES_DB: "BotDB"
+      POSTGRES_USER: "BotUser"
+      POSTGRES_PASSWORD: "BotSecretPassword"
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - express-postgres-network
+    restart: on-failure
+volumes:
+  postgresdata:
+networks:
+  express-postgres-network:
