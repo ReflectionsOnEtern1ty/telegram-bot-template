@@ -5,12 +5,6 @@ Simple template for typescript telegram bot with PostgreSQL database and Docker.
 - Get telegram bot key from [`@BotFather`](https://core.telegram.org/bots#6-botfather) in telegram.
 - Add key as env variable called 'BOT_TOKEN'.
 
-### Build image
-
-```sh
-docker build . -t express-typescript-docker
-```
-
 ### Run image
 
 ```sh
