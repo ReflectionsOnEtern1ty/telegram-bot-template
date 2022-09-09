@@ -1,4 +1,4 @@
-Simple template for typescript telegram bot (using [`Grammy`](https://github.com/grammyjs/grammY) with PostgreSQL database (using [`TypeORM`](https://github.com/typeorm/typeorm) and Docker.
+Simple template for typescript telegram bot (using [`Grammy`](https://github.com/grammyjs/grammY)) with PostgreSQL database (using [`TypeORM`](https://github.com/typeorm/typeorm)) and Docker.
 
 ### Bot preparations 
 
