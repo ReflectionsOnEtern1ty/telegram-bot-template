@@ -9,10 +9,10 @@ services:
     ports:
       - '8080:8080'
     networks:
-      - express-postgres-network
+      - bot-network
     restart: on-failure
 
-  telegram-bot-template:
+  telegram-bot:
     environment:
       - NODE_ENV=development
     build:
@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - ./:/usr/src/app
-    container_name: telegram-bot-template
+    container_name: telegram-bot
     expose:
       - '3000'
     ports:
@@ -29,24 +29,28 @@ services:
     depends_on:
       - postgresql-docker
     networks:
-      - express-postgres-network
+      - bot-network
     restart: on-failure
     
   postgresql-docker:
     image: postgres
-    container_name: postgresql-docker
+    container_name: ${DB_HOST}
     environment:
-      POSTGRES_DB: "BotDB"
-      POSTGRES_USER: "BotUser"
-      POSTGRES_PASSWORD: "BotSecretPassword"
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgresdata:/var/lib/postgresql/data
+      # create example table
+      - ./sql/create_example_table.sql:/docker-entrypoint-initdb.d/create_example_table.sql
+      # fill example table
+      - ./sql/fill_example_table.sql:/docker-entrypoint-initdb.d/fill_example_table.sql
     ports:
       - "5432:5432"
     networks:
-      - express-postgres-network
+      - bot-network
     restart: on-failure
 volumes:
   postgresdata:
 networks:
-  express-postgres-network:
+  bot-network:
